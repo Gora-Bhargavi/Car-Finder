@@ -1,0 +1,60 @@
+.smart-section {
+  margin-bottom: 36px;
+}
+
+.smart-section-header {
+  margin-bottom: 14px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.smart-section-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: -0.02em;
+}
+
+.smart-section-subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+/* 4-column grid — same rhythm as "All matching dealers" */
+.smart-section-track {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
+.smart-section-card-wrap {
+  min-width: 0;
+}
+
+@media (max-width: 1200px) {
+  .smart-section-track {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .smart-section-track {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .smart-section {
+    margin-bottom: 24px;
+  }
+  .smart-section-track {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
