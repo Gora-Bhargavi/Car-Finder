@@ -99,6 +99,7 @@ function App() {
     [filtered]
   );
 
+  
 
   return (
     <LoadScript
@@ -130,18 +131,22 @@ function App() {
               <SearchBar map={map} setDealers={setDealers} onLocationResolved={onLocationResolved} />
             </div>
           </div>
-
           
-          
-
           {/* ── MAIN CONTENT ── */}
           <div className="main-content">
             <FilterBar filters={filters} onChange={setFilters} />
             {loading && (
-              <p style={{ padding: "16px", color: "#5f6368", fontWeight: 600 }}>
-                Loading dealers…
-              </p>
-            )}
+            <div className="skeleton-grid" aria-label="Loading dealers" aria-busy="true">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="skeleton-card">
+                  <div className="skeleton-img" />
+                  <div className="skeleton-line skeleton-line--title" />
+                  <div className="skeleton-line skeleton-line--short" />
+                  <div className="skeleton-line" />
+                </div>
+              ))}
+            </div>
+          )}
             <SmartSection
               sectionKey="top-rated"
               title="Top rated near you"
@@ -184,11 +189,26 @@ function App() {
             </h2>
 
             {filtered.length === 0 ? (
-              <p className="empty-state">
-                No dealers match these filters. Try widening distance or budget,
-                or search a different area.
-              </p>
-            ) : (
+            <div className="empty-state">
+              {dealers.length === 0 ? (
+                <p>No dealers found for this area. Try searching a different city or ZIP.</p>
+              ) : (
+                <>
+                  <p>
+                    {dealers.length} dealer{dealers.length === 1 ? "" : "s"} found nearby,
+                    but none match your current filters.
+                  </p>
+                  <button
+                    type="button"
+                    className="empty-state-reset"
+                    onClick={() => setFilters(defaultFilters)}
+                  >
+                    Clear all filters
+                  </button>
+                </>
+              )}
+            </div>
+          ) : (
               <div className="grid">
                 {filtered.map((d, index) => {
                   const dealerKey = getDealerKey(d, index);
