@@ -21,7 +21,7 @@ function DealerCard({
     rawEmbedded,
     inventoryFilter
   ).length;
-  const hasRemoteInventory = dealer?.id != null && String(dealer.id).trim() !== "";
+  //const hasRemoteInventory = dealer?.id != null && String(dealer.id).trim() !== "";
   const backendVehicleCount =
     typeof dealer.vehicleCount === "number" &&
     !Number.isNaN(dealer.vehicleCount) &&

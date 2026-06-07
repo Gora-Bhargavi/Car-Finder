@@ -15,7 +15,7 @@ import {
 } from "../utils/inventory";
 import "./DealerInventory.css";
 
-const PREVIEW_COUNT = 4;
+//const PREVIEW_COUNT = 4;
 
 export default function DealerInventory({
   dealer,
