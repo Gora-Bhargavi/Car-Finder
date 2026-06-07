@@ -4,6 +4,7 @@ import { formatDistanceMiles } from "../utils/geo";
 import { phoneHref, websiteHref } from "../utils/links";
 import { getDealerKey } from "../utils/dealerFilters";
 import DealerInventory from "./DealerInventory";
+import { API_BASE } from "../config"; // ✅ IMPORTANT
 import "./MapView.css";
 
 const mapContainerStyle = {
@@ -24,6 +25,15 @@ function MapView({
   setMap,
   inventoryFilter = "all",
 }) {
+
+  // ✅ Helper to fix image URLs
+  const getImageUrl = (dealer) => {
+    if (!dealer?.image) {
+      return "https://via.placeholder.com/300x200";
+    }
+    return `${API_BASE}${dealer.image}`;
+  };
+
   return (
     <div className="right-panel map-panel">
       <GoogleMap
@@ -70,37 +80,50 @@ function MapView({
             >
               <div className="map-info">
                 <div className="map-info-media">
+                  {/* ✅ FIXED IMAGE */}
                   <img
-                    src={
-                      selectedDealer.image ||
-                      "https://images.unsplash.com/photo-1563720223185-11003d516935"
-                    }
-                    alt=""
+                    src={getImageUrl(selectedDealer)}
+                    alt={selectedDealer.name}
                     className="map-info-img"
+                    loading="lazy"
+                    onError={(e) => {
+                      e.target.src = "https://via.placeholder.com/300x200";
+                    }}
                   />
                 </div>
+
                 <div className="map-info-body">
                   <h4 className="map-info-title">{selectedDealer.name}</h4>
+
                   <p className="map-info-rating">
                     ⭐{" "}
                     {selectedDealer.rating != null
                       ? Number(selectedDealer.rating).toFixed(1)
                       : "—"}
-                    {formatDistanceMiles(selectedDealer.distanceMiles) ? (
+                    {formatDistanceMiles(selectedDealer.distanceMiles) && (
                       <span className="map-info-dist">
                         {formatDistanceMiles(selectedDealer.distanceMiles)}
                       </span>
-                    ) : null}
+                    )}
                   </p>
-                  <p className="map-info-address">{selectedDealer.address}</p>
+
+                  <p className="map-info-address">
+                    {selectedDealer.address}
+                  </p>
+
                   <div className="map-info-actions">
-                    {phoneHref(selectedDealer.phone) ? (
+                    {phoneHref(selectedDealer.phone) && (
                       <a
-                        className="map-info-link" href={phoneHref(selectedDealer.phone)}>
-                        {selectedDealer.phone ? `Call ${selectedDealer.phone}` : "Call"}
+                        className="map-info-link"
+                        href={phoneHref(selectedDealer.phone)}
+                      >
+                        {selectedDealer.phone
+                          ? `Call ${selectedDealer.phone}`
+                          : "Call"}
                       </a>
-                    ) : null}
-                    {websiteHref(selectedDealer.website) ? (
+                    )}
+
+                    {websiteHref(selectedDealer.website) && (
                       <a
                         className="map-info-link"
                         href={websiteHref(selectedDealer.website)}
@@ -109,7 +132,8 @@ function MapView({
                       >
                         Website
                       </a>
-                    ) : null}
+                    )}
+
                     <a
                       className="map-info-link map-info-link--primary"
                       href={`https://www.google.com/maps/dir/?api=1&destination=${selectedDealer.lat},${selectedDealer.lng}`}
@@ -119,6 +143,7 @@ function MapView({
                       Directions
                     </a>
                   </div>
+
                   <DealerInventory
                     key={
                       selectedDealer.id != null
