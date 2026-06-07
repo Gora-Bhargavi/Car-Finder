@@ -1,9 +1,12 @@
 import React from "react";
 import { formatDistanceMiles } from "../utils/geo";
 import { phoneHref, websiteHref } from "../utils/links";
-import { getListingsFromDealer, filterVehiclesByInventory } from "../utils/inventory";
+import {
+  getListingsFromDealer,
+  filterVehiclesByInventory,
+} from "../utils/inventory";
 import DealerInventory from "./DealerInventory";
-import { API_BASE } from "../config"; // ✅ IMPORTANT
+import { API_BASE } from "../config";
 import "./DealerCard.css";
 
 function DealerCard({
@@ -26,8 +29,7 @@ function DealerCard({
 
   const backendVehicleCount =
     typeof dealer.vehicleCount === "number" &&
-    !Number.isNaN(dealer.vehicleCount) &&
-    dealer.vehicleCount >= 0
+    !Number.isNaN(dealer.vehicleCount)
       ? dealer.vehicleCount
       : 0;
 
@@ -36,10 +38,10 @@ function DealerCard({
 
   const stop = (e) => e.stopPropagation();
 
-  // ✅ FIX: imageUrl MUST be outside return
-  const imageUrl = dealer.image
+  // ✅ STRONG FIX (handles slow backend)
+  const imageUrl = dealer?.image
     ? `${API_BASE}${dealer.image}`
-    : "https://via.placeholder.com/300x200";
+    : "https://via.placeholder.com/300x200?text=No+Image";
 
   return (
     <div
@@ -47,25 +49,19 @@ function DealerCard({
       onClick={() => onSelect(dealer)}
       onMouseEnter={() => onHover(dealerKey)}
       onMouseLeave={() => onHover(null)}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          onSelect(dealer);
-        }
-      }}
     >
-      {/* Image */}
       <div className="dealer-image-container">
         <img
           src={imageUrl}
           alt={dealer.name}
           loading="lazy"
+          style={{ minHeight: "180px", background: "#f3f3f3" }}
           onError={(e) => {
-            e.target.src = "https://via.placeholder.com/300x200";
+            e.target.src =
+              "https://via.placeholder.com/300x200?text=Image+Unavailable";
           }}
         />
+
         {dealer.rating != null && (
           <span className="dealer-rating-badge">
             ⭐ {Number(dealer.rating).toFixed(1)}
@@ -73,15 +69,12 @@ function DealerCard({
         )}
       </div>
 
-      {/* Content */}
       <div className="dealer-body">
         <h3 className="dealer-title">{dealer.name}</h3>
         <p className="dealer-address">{dealer.address}</p>
 
         <div className="dealer-meta-row">
-          {distLabel && (
-            <span className="dealer-meta-pill">📍 {distLabel}</span>
-          )}
+          {distLabel && <span>📍 {distLabel}</span>}
           {saleCountLabel > 0 && (
             <span className="dealer-meta-pill dealer-meta-pill--green">
               {saleCountLabel} for sale
@@ -91,33 +84,19 @@ function DealerCard({
 
         <div className="dealer-links">
           {tel ? (
-            <a
-              className="dealer-link dealer-link--call"
-              href={tel}
-              onClick={stop}
-            >
+            <a href={tel} onClick={stop}>
               📞 {dealer.phone || "Call"}
             </a>
           ) : (
-            <span className="dealer-link dealer-link--muted">
-              No phone
-            </span>
+            <span>No phone</span>
           )}
 
           {web ? (
-            <a
-              className="dealer-link"
-              href={web}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={stop}
-            >
+            <a href={web} target="_blank" rel="noopener noreferrer">
               Website ↗
             </a>
           ) : (
-            <span className="dealer-link dealer-link--muted">
-              No site
-            </span>
+            <span>No site</span>
           )}
         </div>
 

@@ -86,8 +86,10 @@ function MapView({
                     alt={selectedDealer.name}
                     className="map-info-img"
                     loading="lazy"
+                    style={{ minHeight: "120px", background: "#f3f3f3" }}
                     onError={(e) => {
-                      e.target.src = "https://via.placeholder.com/300x200";
+                      e.target.src =
+                        "https://via.placeholder.com/300x200?text=Image+Unavailable";
                     }}
                   />
                 </div>
