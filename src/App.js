@@ -28,6 +28,8 @@ const defaultFilters = {
   maxDistanceMiles: null,
 };
 
+const [loading, setLoading] = useState(false);
+
 function App() {
   const [dealers, setDealers] = useState([]);
   const [userLocation, setUserLocation] = useState({
@@ -41,16 +43,19 @@ function App() {
   const [map, setMap] = useState(null);
 
   const fetchDealers = useCallback(async (lat, lng) => {
-    try {
-      const res = await axios.get(`${API_BASE}/api/dealers`, {
-        params: { lat, lng },
-      });
-      setDealers(Array.isArray(res.data) ? res.data : []);
-    } catch (err) {
-      console.error("Error fetching dealers:", err);
-      setDealers([]);
-    }
-  }, []);
+  setLoading(true);
+  try {
+    const res = await axios.get(`${API_BASE}/api/dealers`, {
+      params: { lat, lng },
+    });
+    setDealers(Array.isArray(res.data) ? res.data : []);
+  } catch (err) {
+    console.error("Error fetching dealers:", err);
+    setDealers([]);
+  } finally {
+    setLoading(false);
+  }
+}, []);
 
 
   useEffect(() => {
@@ -140,7 +145,11 @@ function App() {
           {/* ── MAIN CONTENT ── */}
           <div className="main-content">
             <FilterBar filters={filters} onChange={setFilters} />
-
+            {loading && (
+              <p style={{ padding: "16px", color: "#5f6368", fontWeight: 600 }}>
+                Loading dealers…
+              </p>
+            )}
             <SmartSection
               sectionKey="top-rated"
               title="Top rated near you"
