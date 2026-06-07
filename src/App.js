@@ -28,9 +28,10 @@ const defaultFilters = {
   maxDistanceMiles: null,
 };
 
-const [loading, setLoading] = useState(false);
+
 
 function App() {
+  const [loading, setLoading] = useState(false);
   const [dealers, setDealers] = useState([]);
   const [userLocation, setUserLocation] = useState({
     ...INITIAL_MAP_CENTER,
