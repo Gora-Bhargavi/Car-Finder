@@ -10,7 +10,7 @@ const DISTANCE_OPTIONS = [
 ];
 
 export default function FilterBar({ filters, onChange }) {
-  console.log('FilterBar rendered with filters:', filters);
+  //console.log('FilterBar rendered with filters:', filters);
   return (
     <div className="filter-bar" role="group" aria-label="Dealer filters">
       <div className="filter-field">
