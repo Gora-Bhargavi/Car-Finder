@@ -99,15 +99,6 @@ function App() {
     [filtered]
   );
 
-  //const headline =
-   // userLocation.label && userLocation.label.trim()
-    //  ? "Dealers near you"
-    //  : "Find dealers near you";
-
-  //const subline =
-    //userLocation.label && userLocation.label.trim()
-    //  ? userLocation.label
-    //  : "Search by city or ZIP to see local inventory and distances.";
 
   return (
     <LoadScript
@@ -234,13 +225,7 @@ function App() {
           inventoryFilter={filters.inventory}
         />
       
-      </div>
-      
-    
-            
-
-         
-                  
+      </div>                 
     </LoadScript>
   );
 }
