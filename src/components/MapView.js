@@ -17,6 +17,9 @@ const defaultCenter = {
   lng: -77.86,
 };
 
+const FALLBACK_IMAGE =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect width='300' height='200' fill='%23f1f5f9'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%2394a3b8' font-family='sans-serif' font-size='16'%3ENo Image%3C/text%3E%3C/svg%3E";
+
 function MapView({
   dealers,
   hoveredDealerKey,
@@ -26,13 +29,11 @@ function MapView({
   inventoryFilter = "all",
 }) {
 
-  // ✅ Helper to fix image URLs
-  const getImageUrl = (dealer) => {
-    if (!dealer?.image) {
-      return "https://via.placeholder.com/300x200";
-    }
-    return `${API_BASE}${dealer.image}`;
-  };
+ const getImageUrl = (dealer) => {
+  const rawImage = dealer?.image || "";
+  const imagePath = rawImage.replace(/^https?:\/\/[^/]+/, "");
+  return imagePath ? `${API_BASE}${imagePath}` : FALLBACK_IMAGE;
+};
 
   return (
     <div className="right-panel map-panel">
@@ -88,8 +89,10 @@ function MapView({
                     loading="lazy"
                     style={{ minHeight: "120px", background: "#f3f3f3" }}
                     onError={(e) => {
-                      e.target.src =
-                        "https://via.placeholder.com/300x200?text=Image+Unavailable";
+                      if (e.target.src !== FALLBACK_IMAGE) {
+                        e.target.onerror = null;
+                        e.target.src = FALLBACK_IMAGE;
+                      }
                     }}
                   />
                 </div>
