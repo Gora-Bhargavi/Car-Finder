@@ -44,13 +44,14 @@ function DealerCard({
       if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onSelect(dealer); }
     }}
   >
+
+    const imageUrl = dealer.image
+  ? `${API_BASE}${dealer.image}`
+  : "https://via.placeholder.com/300x200";
+
     {/* Car image — centered on white bg like Carvana */}
     <div className="dealer-image-container">
-      <img
-        src={dealer.image || "https://images.unsplash.com/photo-1563720223185-11003d516935"}
-        alt={dealer.name}
-        className="dealer-image"
-      />
+      <img src={imageUrl} alt={dealer.name} />
       {dealer.rating != null && (
         <span className="dealer-rating-badge">⭐ {Number(dealer.rating).toFixed(1)}</span>
       )}
