@@ -56,6 +56,12 @@ function App() {
     fetchDealers(INITIAL_MAP_CENTER.lat, INITIAL_MAP_CENTER.lng);
   }, [fetchDealers]);
 
+  useEffect(() => {
+  if (userLocation?.lat && userLocation?.lng) {
+    fetchDealers(userLocation.lat, userLocation.lng);
+  }
+}, [userLocation, fetchDealers]);
+
   const onLocationResolved = useCallback((loc) => {
     setUserLocation((prev) => ({
       ...prev,
