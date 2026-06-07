@@ -35,7 +35,7 @@ function App() {
     label: "",
   });
   const [filters, setFilters] = useState(defaultFilters);
-  console.log('Current filters:', filters);
+  //console.log('Current filters:', filters);
   const [hoveredDealerKey, setHoveredDealerKey] = useState(null);
   const [selectedDealer, setSelectedDealer] = useState(null);
   const [map, setMap] = useState(null);
@@ -52,15 +52,14 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {
-    fetchDealers(INITIAL_MAP_CENTER.lat, INITIAL_MAP_CENTER.lng);
-  }, [fetchDealers]);
 
   useEffect(() => {
-  if (userLocation?.lat && userLocation?.lng) {
-    fetchDealers(userLocation.lat, userLocation.lng);
+  const lat = userLocation?.lat;
+  const lng = userLocation?.lng;
+  if (lat != null && lng != null) {
+    fetchDealers(lat, lng);
   }
-}, [userLocation, fetchDealers]);
+}, [userLocation?.lat, userLocation?.lng, fetchDealers]);
 
   const onLocationResolved = useCallback((loc) => {
     setUserLocation((prev) => ({

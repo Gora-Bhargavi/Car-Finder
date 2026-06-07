@@ -39,8 +39,10 @@ function DealerCard({
   const stop = (e) => e.stopPropagation();
 
   // ✅ STRONG FIX (handles slow backend)
-  const imageUrl = dealer?.image
-    ? `${API_BASE}${dealer.image}`
+  const rawImage = dealer?.image || "";
+  const imagePath = rawImage.replace(/^https?:\/\/[^/]+/, "");
+  const imageUrl = imagePath
+    ? `${API_BASE}${imagePath}`
     : "https://via.placeholder.com/300x200?text=No+Image";
 
   return (
